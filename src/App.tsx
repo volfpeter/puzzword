@@ -7,6 +7,7 @@ import { LabeledCheckbox } from "./LabeledCheckbox"
 import { ObscuredTextInput } from "./ObscuredTextInput"
 
 const useAppState = () => ({
+    generator: React.useMemo(() => new MiddleSquareGenerator(), []),
     capital: useToggle(false),
     lower: useToggle(true),
     numeric: useToggle(true),
@@ -15,7 +16,7 @@ const useAppState = () => ({
 })
 
 export function App() {
-    const { capital, lower, numeric, pw, key } = useAppState()
+    const { generator, capital, lower, numeric, pw, key } = useAppState()
 
     return (
         <Grid
@@ -69,7 +70,7 @@ export function App() {
             </Grid.Item>
             <Grid.Item column={2} row={3}>
                 <label>
-                    {MiddleSquareGenerator.generatePassword(pw.text.value, key.text.value, {
+                    {generator.generatePassword(pw.text.value, key.text.value, {
                         capital: capital.value,
                         lower: lower.value,
                         numeric: numeric.value,
