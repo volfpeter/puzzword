@@ -33,6 +33,8 @@ const getCharacterOptions = (options?: { capital?: boolean; lower?: boolean; num
     ...(options?.numeric ?? true ? charRange("0", "9") : []),
 ]
 
+export type GeneratorOptions = { capital: boolean; lower: boolean; numeric: boolean }
+
 export class MiddleSquareGenerator {
     /**
      * The basic configuration of the generator.
@@ -73,11 +75,7 @@ export class MiddleSquareGenerator {
      * @param options.lower    Whether lower-case characters can be included in the result.
      * @param options.numeric  Whether numeric characters can be included in the result.
      */
-    generatePassword = (
-        password: string,
-        key: string,
-        options: { capital: boolean; lower: boolean; numeric: boolean },
-    ) => {
+    generatePassword = (password: string, key: string, options: GeneratorOptions) => {
         const chars = getCharacterOptions(options)
         const n = chars.length
         if (password.length === 0 || key.length === 0 || n === 0) return ""

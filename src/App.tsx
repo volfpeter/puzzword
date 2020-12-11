@@ -1,22 +1,25 @@
 import React from "react"
 
+import type { GeneratorOptions } from "./generator"
 import { MiddleSquareGenerator } from "./generator"
 import { Grid } from "./Grid"
 import { useToggle, useObscuredText } from "./hooks"
 import { LabeledCheckbox } from "./LabeledCheckbox"
 import { ObscuredTextInput } from "./ObscuredTextInput"
+import { parseOptionsFromURL } from "./utils"
 
-const useAppState = () => ({
+const useAppState = (defaultOptions: GeneratorOptions | undefined) => ({
     generator: React.useMemo(() => new MiddleSquareGenerator(), []),
-    capital: useToggle(false),
-    lower: useToggle(true),
-    numeric: useToggle(true),
+    capital: useToggle(defaultOptions?.capital ?? false),
+    lower: useToggle(defaultOptions?.lower ?? true),
+    numeric: useToggle(defaultOptions?.numeric ?? true),
     pw: useObscuredText(),
     key: useObscuredText(),
 })
 
 export function App() {
-    const { generator, capital, lower, numeric, pw, key } = useAppState()
+    const defaultOptions = React.useMemo(() => parseOptionsFromURL(), [])
+    const { generator, capital, lower, numeric, pw, key } = useAppState(defaultOptions)
 
     return (
         <Grid
