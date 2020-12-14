@@ -46,6 +46,11 @@ export class MiddleSquareGenerator {
         cost: 10,
 
         /**
+         * Base 2 logarithm of the number of expansion rounds to execute on the key.
+         */
+        keyCost: 6,
+
+        /**
          * The offset used to generate a sequence of numbers similar to a Weyl sequence.
          */
         sequenceOffset: 85469,
@@ -60,8 +65,8 @@ export class MiddleSquareGenerator {
      * The string representation of the generator configuration.
      */
     public get configuration() {
-        const { cost, sequenceOffset, sequenceMod } = this.config
-        return `$MS$${cost}$${sequenceOffset.toString(16)}$${sequenceMod.toString(16)}$`
+        const { cost, keyCost, sequenceOffset, sequenceMod } = this.config
+        return `$MS$${keyCost.toString(16)}$${cost}$${sequenceOffset.toString(16)}$${sequenceMod.toString(16)}$`
     }
 
     /**
@@ -77,12 +82,58 @@ export class MiddleSquareGenerator {
      */
     generatePassword = (password: string, key: string, options: GeneratorOptions) => {
         const chars = getCharacterOptions(options)
-        const n = chars.length
-        if (password.length === 0 || key.length === 0 || n === 0) return ""
+        if (password.length === 0 || key.length === 0 || chars.length === 0) return ""
 
-        return this.generateSequence(password, key)
-            .map(i => chars[i % n])
-            .join("")
+        const hashedKey = this.hash(key, key, chars, this.config.keyCost)
+        return this.hash(password, hashedKey, chars, this.config.cost)
+    }
+
+    /**
+     * Hashes the given password and key combination.
+     *
+     * @param password  The password to generate the pseudo-random string from. The length of the generated
+     *                  string will be the same as the length of `password`.
+     * @param key  The key to mix `password` with, to generate different strings for different
+     *             `password` - `key` pairs.
+     * @param chars  The array of strings (typically single characters) the result is allowed to contain.
+     * @param cost  Base 2 logarithm of the number of expansion rounds to execute.
+     */
+    hash(password: string, key: string, chars: string[], cost: number) {
+        const numChars = chars.length
+        if (password.length === 0 || key.length === 0 || numChars === 0) return ""
+
+        const sequence = this.generateSequence(password, key, cost)
+        return sequence.map(i => chars[i % numChars]).join("")
+    }
+
+    /**
+     * Returns an array of pseudo-random numbers that are generated from the given `password` and `key`.
+     *
+     * @param password  The password to generate the sequence from. The length of the sequence will
+     *                  be the same as the length of `password`.
+     * @param key  The key to mix `password` with, to generate different sequences for different
+     *             `password` - `key` pairs.
+     * @param cost  Base 2 logarithm of the number of expansion rounds to execute.
+     */
+    protected generateSequence = (password: string, key: string, cost: number) => {
+        let w = 0
+        let x = 0
+        const keyLength = key.length
+        const pwLength = password.length
+        const result: number[] = []
+        const rounds = Math.pow(2, cost)
+
+        for (let r = 0; r < rounds; r++) {
+            const isLastRound = r === rounds - 1
+            for (let i = 0; i < pwLength; i++) {
+                ;[x, w] = this.middleSquare(
+                    x + password.charCodeAt(i) + key.charCodeAt((r * pwLength + i) % keyLength),
+                    w,
+                )
+                if (isLastRound) result.push(x)
+            }
+        }
+        return result
     }
 
     /**
@@ -99,35 +150,6 @@ export class MiddleSquareGenerator {
         x = x * x + w
         const xAsString = x.toString()
         const xLength = xAsString.length
-        return [parseInt(xAsString.substr(Math.round(xLength / 4), Math.round(xLength / 2))), w]
-    }
-
-    /**
-     * Returns an array of pseudo-random numbers that are generated from the given `password` and `key`.
-     *
-     * @param password  The password to generate the sequence from. The length of the sequence will
-     *                  be the same as the length of `password`.
-     * @param key  The key to mix `password` with, to generate different sequences for different
-     *             `password` - `key` pairs.
-     */
-    protected generateSequence = (password: string, key: string) => {
-        let w = 0
-        let x = 0
-        const keyLength = key.length
-        const pwLength = password.length
-        const result: number[] = []
-        const rounds = Math.pow(2, this.config.cost)
-
-        for (let r = 0; r < rounds; r++) {
-            const isLastRound = r === rounds - 1
-            for (let i = 0; i < pwLength; i++) {
-                ;[x, w] = this.middleSquare(
-                    x + password.charCodeAt(i) + key.charCodeAt((r * pwLength + i) % keyLength),
-                    w,
-                )
-                if (isLastRound) result.push(x)
-            }
-        }
-        return result
+        return [parseInt(xAsString.substr(Math.floor(xLength / 4), Math.ceil(xLength / 2))), w]
     }
 }
