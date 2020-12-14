@@ -35,3 +35,27 @@ export function urlEncodeOptions(options: GeneratorOptions): string {
     if (options.numeric) parts.push(Options.numericText)
     return parts.length > 1 ? parts.join(separator) : ""
 }
+
+export class StatCounter {
+    private cntr: Record<string | number, number> = {}
+
+    increment(key: string | number) {
+        this.cntr[key] = (this.cntr[key] ?? 0) + 1
+    }
+
+    logStatistics() {
+        let nbrOfItems = 0
+        const stats = new StatCounter()
+
+        for (const key in this.cntr) {
+            nbrOfItems++
+            stats.increment(this.cntr[key])
+        }
+
+        console.log("Number of keys:", nbrOfItems)
+        console.log("Stats:")
+        for (const key of Object.keys(stats.cntr).sort()) {
+            console.log(key, stats.cntr[key])
+        }
+    }
+}
