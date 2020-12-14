@@ -21,5 +21,5 @@ export function useToggle(defaultValue = false) {
 
 export const useObscuredText = () => ({
     text: useText(),
-    obscured: useToggle(),
+    obscured: useToggle(true),
 })
