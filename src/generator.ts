@@ -84,7 +84,7 @@ export class MiddleSquareGenerator {
         const chars = getCharacterOptions(options)
         if (password.length === 0 || key.length === 0 || chars.length === 0) return ""
 
-        const hashedKey = this.hash(key, key, chars, this.config.keyCost)
+        const hashedKey = this.hash(key, password, chars, this.config.keyCost)
         return this.hash(password, hashedKey, chars, this.config.cost)
     }
 
