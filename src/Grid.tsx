@@ -6,7 +6,7 @@ const gridStyle: React.CSSProperties = {
     rowGap: "1rem",
 }
 
-type GridItemProps = {
+type GridCellProps = {
     children: React.ReactNode | ReactNodeArray
 
     column: React.CSSProperties["gridColumn"]
@@ -14,7 +14,7 @@ type GridItemProps = {
     style?: Omit<React.CSSProperties, "gridColumn" | "gridRow">
 }
 
-function GridItem(props: GridItemProps) {
+function GridCell(props: GridCellProps) {
     const { style: propStyle = {}, column, row, children } = props
     const style = React.useMemo(
         () => ({
@@ -44,8 +44,8 @@ function GridImpl(props: GridProps) {
     return <div style={style}>{props.children}</div>
 }
 
-GridImpl["Item"] = GridItem
+GridImpl["Cell"] = GridCell
 
 export const Grid: React.FunctionComponent<GridProps> & {
-    Item: React.FunctionComponent<GridItemProps>
+    Cell: React.FunctionComponent<GridCellProps>
 } = GridImpl

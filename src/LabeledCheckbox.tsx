@@ -1,5 +1,7 @@
 import React from "react"
 
+import { Label } from "./Label"
+
 type Props = {
     checked: boolean
     id: string
@@ -12,7 +14,7 @@ export function LabeledCheckbox(props: Props) {
     return (
         <>
             <input id={id} type="checkbox" checked={checked} onChange={onChange} />
-            <label htmlFor={id}>{label}</label>
+            <Label htmlFor={id}>{label}</Label>
         </>
     )
 }

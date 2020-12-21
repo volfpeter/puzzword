@@ -1,25 +1,27 @@
 {
-  "name": "puzzword",
-  "version": "1.0.0",
-  "description": "Not a password manager",
-  "main": "src/index.html",
-  "scripts": {
-    "start": "parcel src/index.html",
-    "build": "parcel build src/index.html"
-  },
-  "author": "Peter Volf",
-  "license": "MIT",
-  "dependencies": {
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
-  },
-  "devDependencies": {
-    "@types/react": "^16.9.25",
-    "@types/react-dom": "^16.9.5",
-    "typescript": "^3.9.5"
-  },
-  "browserslist": [
-    "last 5 Chrome versions",
-    "last 5 Firefox versions"
-  ]
+    "name": "puzzword",
+    "version": "1.0.0",
+    "description": "Not a password manager",
+    "main": "src/index.html",
+    "scripts": {
+        "start": "parcel src/index.html",
+        "build": "parcel build src/index.html"
+    },
+    "author": "Peter Volf",
+    "license": "MIT",
+    "dependencies": {
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
+        "react-jss": "^10.5.0"
+    },
+    "devDependencies": {
+        "@types/react": "^16.9.25",
+        "@types/react-dom": "^16.9.5",
+        "@types/react-jss": "^10.0.0",
+        "typescript": "^3.9.5"
+    },
+    "browserslist": [
+        "last 5 Chrome versions",
+        "last 5 Firefox versions"
+    ]
 }

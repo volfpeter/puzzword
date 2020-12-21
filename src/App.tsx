@@ -4,6 +4,7 @@ import type { GeneratorOptions } from "./generator"
 import { MiddleSquareGenerator } from "./generator"
 import { Grid } from "./Grid"
 import { useToggle, useObscuredText } from "./hooks"
+import { Label } from "./Label"
 import { LabeledCheckbox } from "./LabeledCheckbox"
 import { ObscuredTextInput } from "./ObscuredTextInput"
 import { parseOptionsFromURL } from "./utils"
@@ -28,32 +29,32 @@ export function App() {
                 placeContent: "center",
             }}
         >
-            <Grid.Item column={1} row={1}>
+            <Grid.Cell column={1} row={1}>
                 <LabeledCheckbox
                     id="capitalLetters"
                     label="Capital letters"
                     checked={capital.value}
                     onChange={capital.toggle}
                 />
-            </Grid.Item>
-            <Grid.Item column={1} row={2}>
+            </Grid.Cell>
+            <Grid.Cell column={1} row={2}>
                 <LabeledCheckbox
                     id="lowercaseLetters"
                     label="Lowercase letters"
                     checked={lower.value}
                     onChange={lower.toggle}
                 />
-            </Grid.Item>
-            <Grid.Item column={1} row={3}>
+            </Grid.Cell>
+            <Grid.Cell column={1} row={3}>
                 <LabeledCheckbox
                     id="numericChars"
                     label="Numeric characters"
                     checked={numeric.value}
                     onChange={numeric.toggle}
                 />
-            </Grid.Item>
+            </Grid.Cell>
 
-            <Grid.Item column={2} row={1}>
+            <Grid.Cell column={2} row={1}>
                 <ObscuredTextInput
                     obscured={pw.obscured.value}
                     placeholder="Password"
@@ -61,8 +62,8 @@ export function App() {
                     onChange={pw.text.onChange}
                     toggleObscured={pw.obscured.toggle}
                 />
-            </Grid.Item>
-            <Grid.Item column={2} row={2}>
+            </Grid.Cell>
+            <Grid.Cell column={2} row={2}>
                 <ObscuredTextInput
                     obscured={key.obscured.value}
                     placeholder="Key"
@@ -70,16 +71,16 @@ export function App() {
                     onChange={key.text.onChange}
                     toggleObscured={key.obscured.toggle}
                 />
-            </Grid.Item>
-            <Grid.Item column={2} row={3}>
-                <label>
+            </Grid.Cell>
+            <Grid.Cell column={2} row={3}>
+                <Label>
                     {generator.generatePassword(pw.text.value, key.text.value, {
                         capital: capital.value,
                         lower: lower.value,
                         numeric: numeric.value,
                     })}
-                </label>
-            </Grid.Item>
+                </Label>
+            </Grid.Cell>
         </Grid>
     )
 }
