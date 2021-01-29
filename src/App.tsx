@@ -4,9 +4,9 @@ import type { GeneratorOptions } from "./generator"
 import { MiddleSquareGenerator } from "./generator"
 import { Grid } from "./Grid"
 import { useToggle, useObscuredText } from "./hooks"
-import { Label } from "./Label"
 import { LabeledCheckbox } from "./LabeledCheckbox"
-import { ObscuredTextInput } from "./ObscuredTextInput"
+import { ObscuredTextField } from "./ObscuredTextField"
+import { TextField } from "./TextField"
 import { parseOptionsFromURL } from "./utils"
 
 const useAppState = (defaultOptions: GeneratorOptions | undefined) => ({
@@ -16,11 +16,12 @@ const useAppState = (defaultOptions: GeneratorOptions | undefined) => ({
     numeric: useToggle(defaultOptions?.numeric ?? true),
     pw: useObscuredText(),
     key: useObscuredText(),
+    resultHidden: useToggle(true),
 })
 
 export function App() {
     const defaultOptions = React.useMemo(() => parseOptionsFromURL(), [])
-    const { generator, capital, lower, numeric, pw, key } = useAppState(defaultOptions)
+    const { generator, capital, lower, numeric, pw, key, resultHidden } = useAppState(defaultOptions)
 
     return (
         <Grid
@@ -55,7 +56,7 @@ export function App() {
             </Grid.Cell>
 
             <Grid.Cell column={2} row={1}>
-                <ObscuredTextInput
+                <ObscuredTextField
                     obscured={pw.obscured.value}
                     placeholder="Password"
                     value={pw.text.value}
@@ -64,7 +65,7 @@ export function App() {
                 />
             </Grid.Cell>
             <Grid.Cell column={2} row={2}>
-                <ObscuredTextInput
+                <ObscuredTextField
                     obscured={key.obscured.value}
                     placeholder="Key"
                     value={key.text.value}
@@ -73,13 +74,18 @@ export function App() {
                 />
             </Grid.Cell>
             <Grid.Cell column={2} row={3}>
-                <Label>
-                    {generator.generatePassword(pw.text.value, key.text.value, {
+                <TextField
+                    disabled
+                    placeholder="Generated password"
+                    value={generator.generatePassword(pw.text.value, key.text.value, {
                         capital: capital.value,
                         lower: lower.value,
                         numeric: numeric.value,
                     })}
-                </Label>
+                    obscured={resultHidden.value}
+                    onMouseOut={resultHidden.set}
+                    onMouseOver={resultHidden.unset}
+                />
             </Grid.Cell>
         </Grid>
     )

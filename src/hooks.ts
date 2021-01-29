@@ -16,6 +16,8 @@ export function useToggle(defaultValue = false) {
     return {
         value,
         toggle: React.useCallback(() => set(!value), [set, value]),
+        set: React.useCallback(() => set(true), [set]),
+        unset: React.useCallback(() => set(false), [set]),
     }
 }
 

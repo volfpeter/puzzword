@@ -4,6 +4,7 @@ const gridStyle: React.CSSProperties = {
     display: "grid",
     columnGap: "1rem",
     rowGap: "1rem",
+    alignItems: "center",
 }
 
 type GridCellProps = {

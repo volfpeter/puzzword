@@ -1,11 +1,15 @@
 import React from "react"
 import { createUseStyles } from "react-jss"
 
+import { theme } from "./theme"
+
 type Props = Omit<React.ComponentProps<"label">, "className">
 
 const useStyles = createUseStyles({
     label: {
+        color: theme.surfaceText,
         fontSize: "1rem",
+        width: "100%",
     },
 })
 
