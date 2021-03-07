@@ -7,6 +7,7 @@ import { useToggle, useObscuredText } from "./hooks"
 import { LabeledCheckbox } from "./LabeledCheckbox"
 import { ObscuredTextField } from "./ObscuredTextField"
 import { TextField } from "./TextField"
+import { theme } from "./theme"
 import { parseOptionsFromURL } from "./utils"
 
 const useAppState = (defaultOptions: GeneratorOptions | undefined) => ({
@@ -26,8 +27,12 @@ export function App() {
     return (
         <Grid
             style={{
+                width: "100%",
+                height: "100%",
+                alignItems: "center",
+                backgroundColor: theme.surface,
                 gridTemplateColumns: "max-content max-content",
-                placeContent: "center",
+                placeContent: "start center",
             }}
         >
             <Grid.Cell column={1} row={1}>
