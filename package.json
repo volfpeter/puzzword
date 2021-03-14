@@ -5,7 +5,7 @@
     "main": "src/index.html",
     "scripts": {
         "start": "parcel src/index.html",
-        "build": "parcel build src/index.html"
+        "build": "parcel build src/index.html --public-url ./ --no-minify"
     },
     "author": "Peter Volf",
     "license": "MIT",
