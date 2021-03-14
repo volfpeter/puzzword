@@ -2,20 +2,18 @@ import type { GeneratorOptions } from "./generator"
 
 const Options = {
     parameterName: "generatorOptions",
-    separator: "-",
+    separator: "+",
     capitalText: "capital",
     lowerText: "lower",
     numericText: "numeric",
 }
-const optionsParameterName = "generatorOptions"
-const separator = "+"
 
 /**
  * Parses the generator options from the URL if it contains one.
  */
 export function parseOptionsFromURL(): GeneratorOptions | undefined {
     const searchParams = new URLSearchParams(window.location.search)
-    const optionsParameter = searchParams.get(optionsParameterName)
+    const optionsParameter = searchParams.get(Options.parameterName)
     return optionsParameter === null
         ? undefined
         : {
@@ -29,11 +27,11 @@ export function parseOptionsFromURL(): GeneratorOptions | undefined {
  * Generates a "query" URL part from the given generator options.
  */
 export function urlEncodeOptions(options: GeneratorOptions): string {
-    const parts: string[] = [`${optionsParameterName}=`]
+    const parts: string[] = []
     if (options.capital) parts.push(Options.capitalText)
     if (options.lower) parts.push(Options.lowerText)
     if (options.numeric) parts.push(Options.numericText)
-    return parts.length > 1 ? parts.join(separator) : ""
+    return parts.length > 0 ? `${Options.parameterName}=${parts.join(Options.separator)}` : ""
 }
 
 export class StatCounter {

@@ -1,7 +1,6 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { ThemeProvider } from "react-jss"
 
-import type { GeneratorOptions } from "./generator"
 import { MiddleSquareGenerator } from "./generator"
 import { Grid } from "./Grid"
 import { useColorScheme, useObscuredText, useToggle } from "./hooks"
@@ -9,33 +8,50 @@ import { LabeledCheckbox } from "./LabeledCheckbox"
 import { ObscuredTextField } from "./ObscuredTextField"
 import { TextField } from "./TextField"
 import { darkTheme, lightTheme } from "./theme"
-import { parseOptionsFromURL } from "./utils"
+import { parseOptionsFromURL, urlEncodeOptions } from "./utils"
 
-function useAppState(defaultOptions: GeneratorOptions | undefined) {
+function useAppState() {
+    const defaultOptions = useMemo(() => parseOptionsFromURL(), [])
     const colorScheme = useColorScheme()
+    const generator = useMemo(() => new MiddleSquareGenerator(), [])
+    const capital = useToggle(defaultOptions?.capital ?? false)
+    const lower = useToggle(defaultOptions?.lower ?? true)
+    const numeric = useToggle(defaultOptions?.numeric ?? true)
+    const theme = useMemo(
+        () => ({
+            value: colorScheme.value === "dark" ? darkTheme : lightTheme,
+            colorScheme: colorScheme.value,
+            setColorScheme: colorScheme.set,
+        }),
+        [colorScheme.value, colorScheme.set],
+    )
+
+    useEffect(() => {
+        window.history.replaceState(
+            null,
+            "",
+            urlEncodeOptions({
+                capital: capital.value,
+                lower: lower.value,
+                numeric: numeric.value,
+            }),
+        )
+    }, [capital.value, lower.value, numeric.value])
 
     return {
-        generator: useMemo(() => new MiddleSquareGenerator(), []),
-        capital: useToggle(defaultOptions?.capital ?? false),
-        lower: useToggle(defaultOptions?.lower ?? true),
-        numeric: useToggle(defaultOptions?.numeric ?? true),
+        generator,
+        capital,
+        lower,
+        numeric,
+        theme,
         pw: useObscuredText(),
         key: useObscuredText(),
         resultHidden: useToggle(true),
-        theme: useMemo(
-            () => ({
-                value: colorScheme.value === "dark" ? darkTheme : lightTheme,
-                colorScheme: colorScheme.value,
-                setColorScheme: colorScheme.set,
-            }),
-            [colorScheme.value, colorScheme.set],
-        ),
     }
 }
 
 export function App() {
-    const defaultOptions = useMemo(() => parseOptionsFromURL(), [])
-    const { generator, capital, lower, numeric, pw, key, resultHidden, theme } = useAppState(defaultOptions)
+    const { generator, capital, lower, numeric, pw, key, resultHidden, theme } = useAppState()
 
     return (
         <ThemeProvider theme={theme.value}>
