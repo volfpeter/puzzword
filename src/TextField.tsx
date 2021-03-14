@@ -1,7 +1,7 @@
 import React from "react"
-import { createUseStyles } from "react-jss"
+import { createUseStyles, useTheme } from "react-jss"
 
-import { theme } from "./theme"
+import type { Theme } from "./theme"
 
 type Props = {
     disabled?: boolean
@@ -13,7 +13,7 @@ type Props = {
     onMouseOver?: React.MouseEventHandler
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles<Theme>(theme => ({
     textField: {
         background: `${theme.surface}25`,
         borderColor: `${theme.surfaceText}aa`,
@@ -28,11 +28,12 @@ const useStyles = createUseStyles({
             borderColor: `${theme.primary}aa`,
         },
     },
-})
+}))
 
 export function TextField(props: Props) {
     const { disabled, obscured, onChange, onMouseOut, onMouseOver, placeholder, value } = props
-    const styles = useStyles()
+    const theme = useTheme()
+    const styles = useStyles(theme)
 
     return (
         <input
