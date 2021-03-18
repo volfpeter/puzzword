@@ -31,7 +31,7 @@ export function urlEncodeOptions(options: GeneratorOptions): string {
     if (options.capital) parts.push(Options.capitalText)
     if (options.lower) parts.push(Options.lowerText)
     if (options.numeric) parts.push(Options.numericText)
-    return parts.length > 0 ? `${Options.parameterName}=${parts.join(Options.separator)}` : ""
+    return parts.length > 0 ? `?${Options.parameterName}=${parts.join(Options.separator)}` : ""
 }
 
 export class StatCounter {
