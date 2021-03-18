@@ -7820,7 +7820,7 @@ function urlEncodeOptions(options) {
   if (options.capital) parts.push(Options.capitalText);
   if (options.lower) parts.push(Options.lowerText);
   if (options.numeric) parts.push(Options.numericText);
-  return parts.length > 0 ? `${Options.parameterName}=${parts.join(Options.separator)}` : "";
+  return parts.length > 0 ? `?${Options.parameterName}=${parts.join(Options.separator)}` : "";
 }
 
 class StatCounter {
@@ -8008,4 +8008,4 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 _reactDom.default.render(_react.default.createElement(_App.App, null), document.getElementById("root"));
 },{"react":"n8MK","react-dom":"NKHc","./App":"NHn6"}]},{},["zo2T"], null)
-//# sourceMappingURL=src.839b933c.js.map
+//# sourceMappingURL=src.a9d0a8b2.js.map
